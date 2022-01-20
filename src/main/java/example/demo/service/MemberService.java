@@ -34,4 +34,10 @@ public class MemberService {
     public Optional<Member> findOne(Long memberIdx) {
         return memberRepository.findByIdx(memberIdx);
     }
+    public String login(Member member){
+//        if(member.getPassword() == memberRepository.findByPassword(member.getId(), member.getPassword())){
+//
+//        }
+        return member.getName();
+    }
 }

@@ -24,7 +24,7 @@ public class JdbcMemberRepository implements MemberRepository {
 
     @Override
     public Member save(Member member) {
-        String sql = "insert into member(name) values(?)";
+        String sql = "insert into member(name,id,password) values(?,?,?)";
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -33,6 +33,8 @@ public class JdbcMemberRepository implements MemberRepository {
             pstmt = conn.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, member.getName());
+            pstmt.setString(2, member.getId());
+            pstmt.setString(3, member.getPassword());
             pstmt.executeUpdate();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
@@ -62,6 +64,8 @@ public class JdbcMemberRepository implements MemberRepository {
                 Member member = new Member();
                 member.setIdx(rs.getLong("idx"));
                 member.setName(rs.getString("name"));
+                member.setId(rs.getString("id"));
+                member.setPassword(rs.getString("password"));
                 return Optional.of(member);
             } else {
                 return Optional.empty();
@@ -87,6 +91,8 @@ public class JdbcMemberRepository implements MemberRepository {
                 Member member = new Member();
                 member.setIdx(rs.getLong("idx"));
                 member.setName(rs.getString("name"));
+                member.setId(rs.getString("id"));
+                member.setPassword(rs.getString("password"));
                 members.add(member);
             }
             return members;
@@ -111,6 +117,8 @@ public class JdbcMemberRepository implements MemberRepository {
                 Member member = new Member();
                 member.setIdx(rs.getLong("idx"));
                 member.setName(rs.getString("name"));
+                member.setId(rs.getString("id"));
+                member.setPassword(rs.getString("password"));
                 return Optional.of(member);
             }
             return Optional.empty();
@@ -120,6 +128,35 @@ public class JdbcMemberRepository implements MemberRepository {
             close(conn, pstmt, rs);
         }
     }
+
+    @Override
+    public Optional<Member> findByPassword(String id, String password) {
+        String sql = "select * from member where id = ? and password = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, id);
+            pstmt.setString(2, password);
+            rs = pstmt.executeQuery();
+            if(rs.next()) {
+                Member member = new Member();
+                member.setIdx(rs.getLong("idx"));
+                member.setName(rs.getString("name"));
+                member.setId(rs.getString("id"));
+                member.setPassword(rs.getString("password"));
+                return Optional.of(member);
+            }
+            return Optional.empty();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
     private Connection getConnection() {
         return DataSourceUtils.getConnection(dataSource);
     }

@@ -34,6 +34,11 @@ public class MemoryMemberRepository implements MemberRepository{
                 .findAny();
     }
 
+    @Override
+    public Optional<Member> findByPassword(String id, String password) {
+        return Optional.ofNullable(store.get(password));
+    }
+
     public void clearStore(){
         store.clear();
     }
