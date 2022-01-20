@@ -20,7 +20,7 @@ public class MemberService {
     public Long join(Member member){
         validateDuplicateMember(member);
         memberRepository.save(member);
-        return member.getId();
+        return member.getIdx();
     }
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
@@ -31,7 +31,7 @@ public class MemberService {
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
-    public Optional<Member> findOne(Long memberId) {
-        return memberRepository.findById(memberId);
+    public Optional<Member> findOne(Long memberIdx) {
+        return memberRepository.findByIdx(memberIdx);
     }
 }

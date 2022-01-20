@@ -26,9 +26,9 @@ class MemberServiceTest {
         Member member = new Member();
         member.setName("hello");
         //When
-        Long saveId = memberService.join(member);
+        Long saveIdx = memberService.join(member);
         //Then
-        Member findMember = memberRepository.findById(saveId).get();
+        Member findMember = memberRepository.findByIdx(saveIdx).get();
         assertEquals(member.getName(), findMember.getName());
     }
     @Test

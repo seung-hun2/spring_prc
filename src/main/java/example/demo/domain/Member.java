@@ -1,15 +1,15 @@
 package example.demo.domain;
 
 public class Member {
-    private Long id;
+    private Long idx;
     private String name;
 
-    public Long getId() {
-        return id;
+    public Long getIdx() {
+        return idx;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdx(Long idx) {
+        this.idx = idx;
     }
 
     public String getName() {
